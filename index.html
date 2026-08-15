@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>StarCase</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#08080d;color:#fff;font-family:Inter,Arial,sans-serif}
+    .app{max-width:520px;margin:auto;min-height:100vh;padding:16px 14px 92px}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .brand{font-size:22px;font-weight:800}.balance{background:#17131f;border:1px solid #33234b;border-radius:18px;padding:9px 13px;color:#ffd95a;font-weight:700}
+    .hero{border:1px solid #3b2161;background:radial-gradient(circle at 70% 35%,#6d2ac2 0,#24113d 34%,#111018 72%);border-radius:24px;padding:22px;overflow:hidden;position:relative}
+    .hero h1{font-size:28px;margin:0 0 8px}.hero p{color:#c9bfd6;margin:0 0 18px}.case-big{font-size:90px;text-align:center;filter:drop-shadow(0 0 22px #9a45ff);margin:5px 0 12px}
+    button{border:0;color:#fff;font-weight:800;border-radius:15px;padding:13px 18px;background:linear-gradient(135deg,#9a4cff,#6330d7);cursor:pointer}
+    .full{width:100%}.title{font-size:20px;font-weight:800;margin:24px 2px 12px}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.card{background:#121219;border:1px solid #272431;border-radius:19px;padding:14px}.card .emoji{font-size:54px;text-align:center;margin:6px 0}.card h3{margin:4px 0;font-size:16px}.price{color:#ffd95a;font-weight:800;margin:7px 0 10px}
+    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);background:#101015ee;backdrop-filter:blur(12px);border-top:1px solid #292530;display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 12px}
+    .nav button{background:none;color:#8e8798;padding:7px 2px;font-size:12px}.nav button.active{color:#a66cff}.screen{display:none}.screen.active{display:block}
+    .modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modalbox{width:min(420px,100%);background:#111018;border:1px solid #3c2755;border-radius:26px;padding:24px;text-align:center}.open-case{font-size:110px;animation:pulse 1s infinite alternate;filter:drop-shadow(0 0 30px #9b4dff)}
+    @keyframes pulse{to{transform:scale(1.08) rotate(2deg);filter:drop-shadow(0 0 45px #d28cff)}} .reward{font-size:22px;font-weight:800;margin:12px 0;color:#d5a7ff}
+    .muted{color:#938c9e}.profile{background:#121219;border:1px solid #292431;border-radius:22px;padding:20px}.avatar{font-size:60px}
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="brand">⭐ StarCase</div><div class="balance">⭐ <span id="balance">1250</span></div></div>
+
+  <section id="home" class="screen active">
+    <div class="hero">
+      <h1>Открывай кейсы</h1><p>Собирай цифровые подарки и редкие предметы.</p>
+      <div class="case-big">🎁</div>
+      <button class="full" onclick="openCase(10,'Базовый кейс')">Открыть базовый кейс · 10 ⭐</button>
+    </div>
+    <div class="title">Кейсы</div>
+    <div class="grid">
+      <div class="card"><div class="emoji">🎁</div><h3>Базовый</h3><div class="price">⭐ 10</div><button class="full" onclick="openCase(10,'Базовый кейс')">Открыть</button></div>
+      <div class="card"><div class="emoji">💎</div><h3>Редкий</h3><div class="price">⭐ 30</div><button class="full" onclick="openCase(30,'Редкий кейс')">Открыть</button></div>
+      <div class="card"><div class="emoji">🌌</div><h3>Эпический</h3><div class="price">⭐ 100</div><button class="full" onclick="openCase(100,'Эпический кейс')">Открыть</button></div>
+      <div class="card"><div class="emoji">👑</div><h3>Легендарный</h3><div class="price">⭐ 300</div><button class="full" onclick="openCase(300,'Легендарный кейс')">Открыть</button></div>
+    </div>
+  </section>
+
+  <section id="gifts" class="screen">
+    <div class="title">Мои подарки</div>
+    <div class="grid" id="giftGrid"><div class="card"><div class="emoji">🎁</div><h3>Пока пусто</h3><div class="muted">Открой первый кейс</div></div></div>
+  </section>
+
+  <section id="profile" class="screen">
+    <div class="title">Профиль</div>
+    <div class="profile"><div class="avatar">👤</div><h2 id="username">Гость</h2><p class="muted">Твой профиль StarCase</p><p>Баланс: <b>⭐ <span id="balance2">1250</span></b></p></div>
+  </section>
+
+  <section id="topup" class="screen">
+    <div class="title">Пополнение</div>
+    <div class="card"><h2>⭐ Stars</h2><p class="muted">В демо-версии реальные платежи отключены.</p><button class="full" onclick="demoTopup()">Добавить 100 ⭐ (демо)</button></div>
+  </section>
+</div>
+
+<nav class="nav">
+  <button class="active" onclick="show('home',this)">🏠<br>Главная</button>
+  <button onclick="show('gifts',this)">🎁<br>Подарки</button>
+  <button onclick="show('topup',this)">⭐<br>Пополнить</button>
+  <button onclick="show('profile',this)">👤<br>Профиль</button>
+</nav>
+
+<div class="modal" id="modal"><div class="modalbox">
+  <div class="muted" id="caseName"></div><div class="open-case">🎁</div>
+  <div id="result">Открываем...</div><div class="reward" id="reward"></div>
+  <button class="full" onclick="closeModal()">Забрать</button>
+</div></div>
+
+<script>
+const rewards = ['✨ Эксклюзивный фон','🐱 Редкий стикер','🚀 Премиум-эмодзи','🌌 Анимированный фон','👑 Коллекционный предмет'];
+let balance=1250, gifts=[];
+function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function sync(){document.getElementById('balance').textContent=balance;document.getElementById('balance2').textContent=balance}
+function openCase(price,name){
+  if(balance<price){alert('Недостаточно Stars');return}
+  balance-=price;sync();document.getElementById('caseName').textContent=name;document.getElementById('result').textContent='Открываем...';document.getElementById('reward').textContent='';document.getElementById('modal').classList.add('show');
+  setTimeout(()=>{const r=rewards[Math.floor(Math.random()*rewards.length)];document.getElementById('result').textContent='Твой предмет:';document.getElementById('reward').textContent=r;gifts.unshift(r);renderGifts()},1200)
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function renderGifts(){const g=document.getElementById('giftGrid');g.innerHTML=gifts.map(x=>`<div class="card"><div class="emoji">🎁</div><h3>${x}</h3><div class="muted">Коллекция</div></div>`).join('')}
+function demoTopup(){balance+=100;sync();alert('Демо: +100 ⭐')}
+sync();
+</script>
+</body>
+</html>
